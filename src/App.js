@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, Tooltip,
-  PieChart, Pie, Cell, ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Legend,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
 } from "recharts";
 import "./App.css";
 
@@ -56,7 +65,13 @@ export default function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.date || form.intake === "" || form.burned === "" || !form.description.trim()) return;
+    if (
+      !form.date ||
+      form.intake === "" ||
+      form.burned === "" ||
+      !form.description.trim()
+    )
+      return;
     const data = {
       date: form.date,
       intake: Number(form.intake),
@@ -64,14 +79,17 @@ export default function App() {
       description: form.description.trim(),
     };
     if (mode === "edit") {
-      setRecords((prev) => prev.map((r) => (r.id === editingId ? { ...r, ...data } : r)));
+      setRecords((prev) =>
+        prev.map((r) => (r.id === editingId ? { ...r, ...data } : r)),
+      );
     } else {
       setRecords((prev) => [...prev, { id: Date.now(), ...data }]);
     }
     closeModal();
   };
 
-  const handleDelete = (id) => setRecords((prev) => prev.filter((r) => r.id !== id));
+  const handleDelete = (id) =>
+    setRecords((prev) => prev.filter((r) => r.id !== id));
 
   // Last 7 calendar days (today included), not last 7 records
   const today = new Date();
@@ -83,7 +101,11 @@ export default function App() {
   const weeklyData = records
     .filter((r) => r.date >= startISO && r.date <= todayISO)
     .sort((a, b) => a.date.localeCompare(b.date))
-    .map((r) => ({ date: r.date, calorieIntake: r.intake, calorieBurned: r.burned }));
+    .map((r) => ({
+      date: r.date,
+      calorieIntake: r.intake,
+      calorieBurned: r.burned,
+    }));
 
   const totalIntake = records.reduce((s, r) => s + r.intake, 0);
   const totalBurned = records.reduce((s, r) => s + r.burned, 0);
@@ -102,10 +124,12 @@ export default function App() {
       <section className="top-panel">
         <div className="update-card">
           <h2>Update Today's Data</h2>
-          <button className="add-btn" onClick={openAdd}>+ Add data</button>
+          <button className="add-btn" onClick={openAdd}>
+            + Add data
+          </button>
         </div>
 
-        {records.length > 0 && (
+        {records.length > 0 ? (
           <div className="weekly">
             <h2>Weekly Health Trends</h2>
             <div className="chart-box">
@@ -122,6 +146,8 @@ export default function App() {
               </ResponsiveContainer>
             </div>
           </div>
+        ) : (
+          <p className="no-data">No data available</p>
         )}
       </section>
 
@@ -137,12 +163,25 @@ export default function App() {
                   <div className="record-info">
                     <p className="record-desc">{r.description}</p>
                     <p className="record-cal">
-                      Calories Intake = {r.intake} &nbsp; Calories Burned = {r.burned}
+                      Calories Intake = {r.intake} &nbsp; Calories Burned ={" "}
+                      {r.burned}
                     </p>
                   </div>
                   <span className="record-date">{r.date}</span>
-                  <button className="icon-btn delete" aria-label="Delete" onClick={() => handleDelete(r.id)}>✕</button>
-                  <button className="icon-btn edit" aria-label="Edit" onClick={() => openEdit(r)}>✎</button>
+                  <button
+                    className="icon-btn delete"
+                    aria-label="Delete"
+                    onClick={() => handleDelete(r.id)}
+                  >
+                    ✕
+                  </button>
+                  <button
+                    className="icon-btn edit"
+                    aria-label="Edit"
+                    onClick={() => openEdit(r)}
+                  >
+                    ✎
+                  </button>
                 </li>
               ))}
             </ul>
@@ -151,7 +190,7 @@ export default function App() {
 
         <div className="overall">
           <h2 className="section-title">Overall Data</h2>
-          <PieChart width={200} height={220}>
+          <PieChart width={260} height={260}>
             <Pie
               data={total > 0 ? pieData : []}
               dataKey="value"
@@ -166,10 +205,16 @@ export default function App() {
                 <Cell key={d.name} fill={d.color} />
               ))}
             </Pie>
-            <Legend
-              payload={pieData.map((d) => ({ value: d.name, type: "square", color: d.color }))}
-            />
+            {/* <Legend verticalAlign="bottom" /> */}
           </PieChart>
+          <div className="pie-legend">
+            {pieData.map((d) => (
+              <span key={d.name} style={{ color: d.color }}>
+                <i style={{ background: d.color }} />
+                {d.name}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -184,22 +229,56 @@ export default function App() {
               </h3>
 
               <label htmlFor="date">Date:</label>
-              <input id="date" name="date" type="date" value={form.date} onChange={handleChange} required />
+              <input
+                id="date"
+                name="date"
+                type="date"
+                value={form.date}
+                onChange={handleChange}
+                required
+              />
 
               <label htmlFor="intake">Calorie Intake:</label>
-              <input id="intake" name="intake" type="number" min="0" placeholder="Enter Today's Calorie Intake"
-                value={form.intake} onChange={handleChange} required />
+              <input
+                id="intake"
+                name="intake"
+                type="number"
+                min="0"
+                placeholder="Enter Today's Calorie Intake"
+                value={form.intake}
+                onChange={handleChange}
+                required
+              />
 
               <label htmlFor="burned">Calorie Burned:</label>
-              <input id="burned" name="burned" type="number" min="0" placeholder="Enter Today's Calorie Burned"
-                value={form.burned} onChange={handleChange} required />
+              <input
+                id="burned"
+                name="burned"
+                type="number"
+                min="0"
+                placeholder="Enter Today's Calorie Burned"
+                value={form.burned}
+                onChange={handleChange}
+                required
+              />
 
               <label htmlFor="description">Short Description:</label>
-              <input id="description" name="description" type="text" placeholder="Enter a short description"
-                value={form.description} onChange={handleChange} required />
+              <input
+                id="description"
+                name="description"
+                type="text"
+                placeholder="Enter a short description"
+                value={form.description}
+                onChange={handleChange}
+                required
+              />
 
-              <button type="submit" className="submit-btn">Submit</button>
-              <button type="button" className="cancel-btn" onClick={closeModal}>Cancel</button>
+              <button type="submit" className="submit-btn">
+                Submit
+              </button>
+              <button type="button" className="cancel-btn" onClick={closeModal}>
+                Cancel
+              </button>
             </form>
           </div>
         </div>
