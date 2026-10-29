@@ -16,6 +16,7 @@ import "./App.css";
 
 const KEY = "healthAndFitness";
 const emptyForm = { date: "", intake: "", burned: "", description: "" };
+const RAD = Math.PI / 180;
 
 const toLocalISO = (d) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -26,6 +27,24 @@ const loadRecords = () => {
   } catch {
     return [];
   }
+};
+
+const renderLabel = ({ cx, cy, midAngle, outerRadius, percent }) => {
+  const r = outerRadius * 0.6;
+  const x = cx + r * Math.cos(-midAngle * RAD);
+  const y = cy + r * Math.sin(-midAngle * RAD);
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="#fff"
+      fontSize={12}
+      textAnchor="middle"
+      dominantBaseline="central"
+    >
+      {`${Math.round(percent * 100)}%`}
+    </text>
+  );
 };
 
 export default function App() {
@@ -139,9 +158,14 @@ export default function App() {
                   <XAxis dataKey="date" interval={0} />
                   <YAxis />
                   <Tooltip />
-                  <Legend />
-                  <Bar dataKey="calorieIntake" fill="#8884d8" />
-                  <Bar dataKey="calorieBurned" fill="#82ca9d" />
+                  <Legend
+                    payload={[
+                      { value: "calorieIntake", type: "square", color: "#8884d8" },
+                      { value: "calorieBurned", type: "square", color: "#82ca9d" },
+                    ]}
+                  />
+                  <Bar dataKey="calorieIntake" fill="#8884d8" barSize={30} />
+                  <Bar dataKey="calorieBurned" fill="#82ca9d" barSize={30} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -190,22 +214,22 @@ export default function App() {
 
         <div className="overall">
           <h2 className="section-title">Overall Data</h2>
-          <PieChart width={260} height={260}>
+          <PieChart width={200} height={180}>
             <Pie
               data={total > 0 ? pieData : []}
               dataKey="value"
               nameKey="name"
               cx="50%"
-              cy="45%"
-              outerRadius={60}
-              label={({ percent }) => `${Math.round(percent * 100)}%`}
+              cy="50%"
+              outerRadius={65}
+              stroke="#fff"
+              label={renderLabel}
               labelLine={false}
             >
               {pieData.map((d) => (
                 <Cell key={d.name} fill={d.color} />
               ))}
             </Pie>
-            {/* <Legend verticalAlign="bottom" /> */}
           </PieChart>
           <div className="pie-legend">
             {pieData.map((d) => (

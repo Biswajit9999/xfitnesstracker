@@ -79,11 +79,14 @@ body {
   gap: 24px;
   margin-top: 24px;
 }
-.recent { flex: 1; min-width: 0; overflow-y: auto; padding-right: 8px; }
-.overall { flex: 0 0 300px; }
+.recent { flex: 0 0 65%; min-width: 0; overflow-y: auto; padding-right: 8px; }
+.overall { flex: 0 0 25%; text-align: center; }
+.overall .section-title { text-align: center; }
+/* .recent { flex: 1; min-width: 0; overflow-y: auto; padding-right: 8px; } */
+/* .overall { flex: 0 0 300px; } */
 
 .section-title { font-style: italic; font-size: 2rem; margin: 0 0 12px; }
-.overall .section-title { text-align: left; }
+/* .overall .section-title { text-align: left; } */
 .muted { color: #000; font-size: 1.1rem; }
 
 /* ---------- Records ---------- */
@@ -182,7 +185,7 @@ body {
   .weekly h2 { font-size: 1.4rem; }
 
   .bottom { flex-direction: column; align-items: center; }
-  .recent { overflow: visible; }
+  .recent { overflow: visible;flex:none }
   .section-title { font-size: 1.5rem; text-align: center; }
   .overall { flex: none; }
   .overall .section-title { text-align: center; }
