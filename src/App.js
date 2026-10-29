@@ -129,7 +129,7 @@ export default function App() {
           </button>
         </div>
 
-        {records.length > 0 ? (
+        {weeklyData.length > 0 ? (
           <div className="weekly">
             <h2>Weekly Health Trends</h2>
             <div className="chart-box">
