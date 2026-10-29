@@ -136,7 +136,7 @@ export default function App() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={weeklyData}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
+                  <XAxis dataKey="date" interval={0} />
                   <YAxis />
                   <Tooltip />
                   <Legend />
